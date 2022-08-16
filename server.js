@@ -8,7 +8,8 @@ const { CONNECT } = process.env;
 
 
 
-mongoose.connect(CONNECT).then(() => {
+mongoose.connect(CONNECT)
+  .then(() => {
   console.log("Database connection successful");
   app.listen(PORT, () => {
     console.log(`Server running. Use our API on port: ${PORT}`)
