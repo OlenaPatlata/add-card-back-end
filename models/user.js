@@ -20,28 +20,32 @@ const loginUser= Joi.object({
 const verifyEmailSchema= Joi.object({
     email: Joi.string().required().pattern(emailRegexp)
 });
+const editAmountCash = Joi({
+  amount: Joi.number().default(0),
+  ccy: Joi.string().default("UAN"),
+});
 const schemas = {
   registerUser,
   loginUser,
-  verifyEmailSchema
+  verifyEmailSchema,
+  editAmountCash
 }
 
 
 const userSchema = Schema({
   name: { type: String, require: [true, "Name is required"] },
   email: { type: String, require: [true, "Email is required"], uniqu: true, match: emailRegexp },
-  password: { type: String, required: [true, 'Password is required'] },
+  password: { type: String, required: [true, 'Password is required'], minlength: 6 },
   token: { type: String, default: '' },
   verify: { type: Boolean, default: false },
   verificationToken: { type: String, required: [true, "Verify token is required"] },
-  cash: {type: Array, default: [] }
+  cash: [
+    { amount: Number, default: 0 },
+    { ccy: String, default:"UAN", enum: groupCash }
+  ]
   
 }, { versionKey: false, timestamps: true });
 
-const cashSchema = Schema({
-  ccy: String, enum: groupCash, default: 'UAN',
-  amount: Number, default:0
-})
 
 const User = model('user', userSchema);
 
